@@ -1,0 +1,3 @@
+[submodule "libs/Kouky3d"]
+	path = libs/Kouky3d
+	url = git@github.com:derkaczda/Kouky-3D.git
