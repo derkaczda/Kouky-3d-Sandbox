@@ -2,6 +2,6 @@
 
 int main (int argc, char *argv[]) 
 { 
-    showWindow();
+    showWindow("Kouky3D Sandbox");
     return 0;
 }
