@@ -2,6 +2,8 @@
 
 int main (int argc, char *argv[]) 
 { 
-    showMultipleWindows(4);
+    Kouky3d::Window window("Sandbox", 800, 600);
+    window.Init();
+    window.Show();
     return 0;
 }
