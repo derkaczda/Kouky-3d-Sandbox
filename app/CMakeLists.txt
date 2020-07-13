@@ -1,7 +1,13 @@
 project(app)
 
-add_executable(${PROJECT_NAME}
+
+set(SOURCE_FILES
     main.cpp
+    Sandbox.cpp
+)
+
+add_executable(${PROJECT_NAME}
+    ${SOURCE_FILES}
 )
 
 target_link_libraries(${PROJECT_NAME}

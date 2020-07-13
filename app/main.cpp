@@ -1,9 +1,9 @@
-#include <Kouky3d.h>
+#include "Sandbox.h"
 
 int main (int argc, char *argv[]) 
 { 
-    Kouky3d::Window window("Sandbox", 800, 600);
-    window.Init();
-    window.Show();
+    Sandbox sandbox;
+    sandbox.Init();
+    sandbox.Update();
     return 0;
 }
