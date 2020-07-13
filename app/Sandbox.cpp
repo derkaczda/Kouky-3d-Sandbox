@@ -18,8 +18,10 @@ void Sandbox::Init()
 
 void Sandbox::Update()
 {
+    Kouky3d::setClearColor(0.3f, 0.3f, 0.3f, 1.0f);
     while(true)
     {
+        Kouky3d::clear();
         m_window->OnUpdate();
     }
 }
