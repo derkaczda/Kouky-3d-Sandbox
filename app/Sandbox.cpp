@@ -33,12 +33,11 @@ void Sandbox::Update()
         0.0f,  0.5f, 0.0f
     };
 
-    unsigned int VBO;
-    glGenBuffers(1, &VBO);
+    Kouky3d::VertexBuffer vertexBuffer(vertices, sizeof(vertices));
+    Kouky3d::VertexArray vertexArray;
+    vertexArray.AddBuffer(vertexBuffer);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);  
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
+    // TODO: move shader to own class
     const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
     "void main()\n"
@@ -88,27 +87,17 @@ void Sandbox::Update()
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0); 
+    
 
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);  
-
-    // 1. bind Vertex Array Object
-    glBindVertexArray(VAO);
-    // 2. copy our vertices array in a buffer for OpenGL to use
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    // 3. then set our vertex attributes pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);  
 
     glUseProgram(shaderProgram);
-    glBindVertexArray(VAO);
 
     // ----------------
     // end triangle setup
     // ----------------
 
 
+    vertexArray.Bind();
     Kouky3d::setClearColor(0.3f, 0.3f, 0.3f, 1.0f);
     while(true)
     {
