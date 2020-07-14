@@ -95,6 +95,7 @@ void Sandbox::Update()
         Kouky3d::Renderer::Clear();
         vertexArray.Bind();
         orangeShader.Bind();
+        // TODO: move that somewhere into the engine
         glDrawArrays(GL_TRIANGLES, 0, 3);
         m_window->OnUpdate();
 
@@ -103,6 +104,7 @@ void Sandbox::Update()
         Kouky3d::Renderer::Clear();
         second_vertexArray.Bind();     
         pinkShader.Bind();
+        // TODO: move that somewhere into the engine
         glDrawArrays(GL_TRIANGLES, 0, 3);
         m_secondWindow->OnUpdate();
     }
