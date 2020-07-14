@@ -11,4 +11,5 @@ public:
 
 private:
     Kouky3d::Window* m_window;
+    Kouky3d::Window* m_secondWindow;
 };

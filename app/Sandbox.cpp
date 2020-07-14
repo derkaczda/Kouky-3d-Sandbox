@@ -9,6 +9,7 @@
 Sandbox::Sandbox()
 {
     m_window = new Kouky3d::Window("Sanbox", 800, 600);
+    m_secondWindow = new Kouky3d::Window("Second window", 800, 600);
 }
 
 Sandbox::~Sandbox()
@@ -19,8 +20,16 @@ Sandbox::~Sandbox()
 void Sandbox::Init()
 {
     std::cout << "Kouky3d version is " << Kouky3d::Version() << std::endl;
+    
+    
     m_window->Init();
     m_window->Show();
+
+    //gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
+    m_secondWindow->Init(false);
+    m_secondWindow->Show();
 }
 
 void Sandbox::Update()
@@ -39,6 +48,12 @@ void Sandbox::Update()
     Kouky3d::VertexArray vertexArray;
     vertexArray.AddBuffer(vertexBuffer);
 
+    // REMARK: vertex array objects are not shareable between
+    // different contexts. Vertex buffers are shareable!
+    m_secondWindow->GiveContext();
+    Kouky3d::VertexArray second_vertexArray;
+    second_vertexArray.AddBuffer(vertexBuffer);
+
     // TODO: move shader source to own file
     const std::string vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
@@ -47,26 +62,48 @@ void Sandbox::Update()
     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "}\0";
 
-    const std::string fragmentShaderSource = "#version 330 core\n"
+    const std::string fragmentShaderSourceOrange = "#version 330 core\n"
     "out vec4 FragColor;\n"
     "void main()\n"
     "{\n"
     "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "}\0";
 
-    Kouky3d::Shader shader(vertexShaderSource, fragmentShaderSource);
+    const std::string fragmentShaderSourcePink = "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+    "    FragColor = vec4(1.0f, 0.5f, 0.8f, 1.0f);\n"
+    "}\0";
+
+    // REMARK:
+    // glPrograms are not shareable between different contexts
+    m_window->GiveContext();
+    Kouky3d::Shader orangeShader(vertexShaderSource, fragmentShaderSourceOrange);
+
+    m_secondWindow->GiveContext();
+    Kouky3d::Shader pinkShader(vertexShaderSource, fragmentShaderSourcePink);
 
     // ----------------
     // end triangle setup
     // ----------------
 
-    shader.Bind();
-    vertexArray.Bind();
-    Kouky3d::Renderer::ClearColor({0.3f, 0.3f, 0.3f, 1.0f});
     while(true)
     {
+        m_window->GiveContext();
+        Kouky3d::Renderer::ClearColor({0.3f, 0.3f, 0.3f, 1.0f});
         Kouky3d::Renderer::Clear();
+        vertexArray.Bind();
+        orangeShader.Bind();
         glDrawArrays(GL_TRIANGLES, 0, 3);
         m_window->OnUpdate();
+
+        m_secondWindow->GiveContext();
+        Kouky3d::Renderer::ClearColor({0.3f, 0.3f, 0.3f, 1.0f});
+        Kouky3d::Renderer::Clear();
+        second_vertexArray.Bind();     
+        pinkShader.Bind();
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        m_secondWindow->OnUpdate();
     }
 }
