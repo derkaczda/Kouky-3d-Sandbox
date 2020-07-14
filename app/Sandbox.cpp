@@ -17,6 +17,7 @@ Sandbox::~Sandbox()
 
 void Sandbox::Init()
 {
+    std::cout << "Kouky3d version is " << Kouky3d::Version() << std::endl;
     m_window->Init();
     m_window->Show();
 }
