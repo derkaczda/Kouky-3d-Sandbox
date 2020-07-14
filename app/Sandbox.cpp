@@ -25,7 +25,7 @@ void Sandbox::Init()
     m_window->Init();
     m_window->Show();
 
-    //gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    // TODO: move that somewhere into the engine
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
     m_secondWindow->Init(false);
