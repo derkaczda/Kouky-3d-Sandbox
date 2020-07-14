@@ -99,10 +99,10 @@ void Sandbox::Update()
 
 
     vertexArray.Bind();
-    Kouky3d::setClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+    Kouky3d::Renderer::ClearColor({0.3f, 0.3f, 0.3f, 1.0f});
     while(true)
     {
-        Kouky3d::clear();
+        Kouky3d::Renderer::Clear();
         glDrawArrays(GL_TRIANGLES, 0, 3);
         m_window->OnUpdate();
     }
