@@ -9,12 +9,13 @@
 Sandbox::Sandbox()
 {
     m_window = new Kouky3d::Window("Sanbox", 800, 600);
-    m_secondWindow = new Kouky3d::Window("Second window", 800, 600);
+    m_secondWindow = new Kouky3d::Window("Second window", 300, 300);
 }
 
 Sandbox::~Sandbox()
 {
     delete m_window;
+    delete m_secondWindow;
 }
 
 void Sandbox::Init()
@@ -78,6 +79,11 @@ void Sandbox::Update()
 
     // REMARK:
     // glPrograms are not shareable between different contexts
+    /* TODO: it should be possible to share the vertex/fragment objects
+     * and just create the glProgram (wrapper) for the two different contexts. 
+     * So maybe it should be possible to construct a shader from different vertex/fragment sources
+     * could also help reusage of code.
+     * */
     m_window->GiveContext();
     Kouky3d::Shader orangeShader(vertexShaderSource, fragmentShaderSourceOrange);
 
