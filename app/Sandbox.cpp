@@ -1,4 +1,7 @@
 #include "Sandbox.h"
+#include <glad/glad.h>
+#include <glfw/glfw3.h>
+#include <glm/mat3x3.hpp>
 
 Sandbox::Sandbox()
 {
@@ -21,7 +24,10 @@ void Sandbox::Update()
     Kouky3d::setClearColor(0.3f, 0.3f, 0.3f, 1.0f);
     while(true)
     {
-        Kouky3d::clear();
+        glClearColor(0.5f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        //Kouky3d::clear();
+        glm::mat3 test;
         m_window->OnUpdate();
     }
 }
