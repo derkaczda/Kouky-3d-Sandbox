@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 
 Sandbox::Sandbox()
 {
@@ -126,8 +127,10 @@ void Sandbox::Update()
             windowpos.x = windowpos.y = 50;
             windowstepsize = -windowstepsize;
         }
-
-        std::cout << "Window pos x: " << m_secondWindow->GetPosition().x << " y: " << m_secondWindow->GetPosition().y << std::endl;
+        std::ostringstream oss;
+        oss << "x: " << m_secondWindow->GetPosition().x << " y: " << m_secondWindow->GetPosition().y;
+        m_secondWindow->SetTitle(oss.str());
+        //std::cout << "Window pos x: " << m_secondWindow->GetPosition().x << " y: " << m_secondWindow->GetPosition().y << std::endl;
        
         Kouky3d::Renderer::ClearColor({0.3f, 0.3f, 0.3f, 1.0f});
         Kouky3d::Renderer::Clear();
