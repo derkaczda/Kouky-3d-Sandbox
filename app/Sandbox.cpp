@@ -94,6 +94,9 @@ void Sandbox::Update()
     // end triangle setup
     // ----------------
 
+    glm::vec2 windowpos{100, 100};
+    float windowstepsize = 1;
+    m_secondWindow->SetPosition(windowpos);
     while(true)
     {
         m_window->GiveContext();
@@ -106,6 +109,26 @@ void Sandbox::Update()
         m_window->OnUpdate();
 
         m_secondWindow->GiveContext();
+
+        //
+        // move window around screen
+        //
+        windowpos += windowstepsize;
+        m_secondWindow->SetPosition(windowpos);
+
+        if (windowpos.x > 300)
+        {
+            windowpos.x = windowpos.y = 300;
+            windowstepsize = -windowstepsize;
+        }
+        else if(windowpos.x < 50)
+        {
+            windowpos.x = windowpos.y = 50;
+            windowstepsize = -windowstepsize;
+        }
+
+        std::cout << "Window pos x: " << m_secondWindow->GetPosition().x << " y: " << m_secondWindow->GetPosition().y << std::endl;
+       
         Kouky3d::Renderer::ClearColor({0.3f, 0.3f, 0.3f, 1.0f});
         Kouky3d::Renderer::Clear();
         second_vertexArray.Bind();     
