@@ -116,6 +116,7 @@ void Sandbox::Update()
         //
         windowpos += windowstepsize;
         m_secondWindow->SetPosition(windowpos);
+        m_secondWindow->SetSize(windowpos);
 
         if (windowpos.x > 300)
         {
