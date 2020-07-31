@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include <glm/mat3x3.hpp>
+#include <glm/gtx/transform.hpp>
 
 #include <iostream>
 #include <string>
@@ -59,9 +60,10 @@ void Sandbox::Update()
     // TODO: move shader source to own file
     const std::string vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
+    "uniform mat4 u_Transform;"
     "void main()\n"
     "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "   gl_Position = u_Transform * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "}\0";
 
     const std::string fragmentShaderSourceOrange = "#version 330 core\n"
@@ -98,6 +100,7 @@ void Sandbox::Update()
     glm::vec2 windowpos{100, 100};
     float windowstepsize = 1;
     m_secondWindow->SetPosition(windowpos);
+    float angle = 0;
     while(true)
     {
         m_window->GiveContext();
@@ -105,38 +108,29 @@ void Sandbox::Update()
         Kouky3d::Renderer::Clear();
         vertexArray.Bind();
         orangeShader.Bind();
+
+        angle += 0.1f;
+        glm::mat4 transform = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0, 0.0f, 1.0f));
+        orangeShader.Uniform("u_Transform", transform);
         // TODO: move that somewhere into the engine
         glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        std::ostringstream oss_window_one;
+        oss_window_one << "x: " << m_window->GetPosition().x << " y: " << m_window->GetPosition().y;
+        m_window->SetTitle(oss_window_one.str());
         m_window->OnUpdate();
 
         m_secondWindow->GiveContext();
 
-        //
-        // move window around screen
-        //
-        windowpos += windowstepsize;
-        m_secondWindow->SetPosition(windowpos);
-        m_secondWindow->SetSize(windowpos);
-
-        if (windowpos.x > 300)
-        {
-            windowpos.x = windowpos.y = 300;
-            windowstepsize = -windowstepsize;
-        }
-        else if(windowpos.x < 50)
-        {
-            windowpos.x = windowpos.y = 50;
-            windowstepsize = -windowstepsize;
-        }
-        std::ostringstream oss;
-        oss << "x: " << m_secondWindow->GetPosition().x << " y: " << m_secondWindow->GetPosition().y;
-        m_secondWindow->SetTitle(oss.str());
-        //std::cout << "Window pos x: " << m_secondWindow->GetPosition().x << " y: " << m_secondWindow->GetPosition().y << std::endl;
+        std::ostringstream oss_window_two;
+        oss_window_two << "x: " << m_secondWindow->GetPosition().x << " y: " << m_secondWindow->GetPosition().y;
+        m_secondWindow->SetTitle(oss_window_two.str());
        
         Kouky3d::Renderer::ClearColor({0.3f, 0.3f, 0.3f, 1.0f});
         Kouky3d::Renderer::Clear();
         second_vertexArray.Bind();     
         pinkShader.Bind();
+        pinkShader.Uniform("u_Transform", glm::mat4(1.0f));
         // TODO: move that somewhere into the engine
         glDrawArrays(GL_TRIANGLES, 0, 3);
         m_secondWindow->OnUpdate();
