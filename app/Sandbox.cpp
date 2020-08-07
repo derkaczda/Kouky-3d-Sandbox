@@ -8,6 +8,8 @@
 #include <string>
 #include <sstream>
 
+#define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
+
 Sandbox::Sandbox()
 {
     m_window = new Kouky3d::Window("Sanbox", 800, 600);
@@ -26,13 +28,29 @@ void Sandbox::Init()
     
     
     m_window->Init();
+    m_window->SetCallback(BIND_EVENT_FN(Sandbox::OnEvent));
     m_window->Show();
 
     // TODO: move that somewhere into the engine
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
     m_secondWindow->Init(false);
+    m_secondWindow->SetCallback(BIND_EVENT_FN(Sandbox::OnEvent));
     m_secondWindow->Show();
+}
+
+void Sandbox::OnEvent(Kouky3d::Event& e)
+{
+    Kouky3d::EventDispatcher dispatcher(e);
+    dispatcher.Dispatch<Kouky3d::WindowCloseEvent>(BIND_EVENT_FN(Sandbox::OnWindowClose));
+}
+
+bool Sandbox::OnWindowClose(Kouky3d::WindowCloseEvent& e)
+{
+    std::cout << "Window close event appeared" << std::endl;
+    m_window->Shutdown();
+    m_secondWindow->Shutdown();
+    return true;
 }
 
 void Sandbox::Update()
