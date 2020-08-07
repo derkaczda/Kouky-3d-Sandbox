@@ -37,6 +37,17 @@ void Sandbox::Init()
     m_secondWindow->Init(false);
     m_secondWindow->SetCallback(BIND_EVENT_FN(Sandbox::OnEvent));
     m_secondWindow->Show();
+
+    m_running = true;
+}
+
+void Sandbox::Shutdown()
+{
+    m_window->Shutdown();
+    m_secondWindow->Shutdown();
+
+    delete m_window;
+    delete m_secondWindow;
 }
 
 void Sandbox::OnEvent(Kouky3d::Event& e)
@@ -47,9 +58,7 @@ void Sandbox::OnEvent(Kouky3d::Event& e)
 
 bool Sandbox::OnWindowClose(Kouky3d::WindowCloseEvent& e)
 {
-    std::cout << "Window close event appeared" << std::endl;
-    m_window->Shutdown();
-    m_secondWindow->Shutdown();
+    m_running = false;
     return true;
 }
 
@@ -119,7 +128,7 @@ void Sandbox::Update()
     float windowstepsize = 1;
     m_secondWindow->SetPosition(windowpos);
     float angle = 0;
-    while(true)
+    while(m_running)
     {
         m_window->GiveContext();
         Kouky3d::Renderer::ClearColor({0.3f, 0.3f, 0.3f, 1.0f});

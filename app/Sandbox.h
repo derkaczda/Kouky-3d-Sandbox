@@ -7,6 +7,8 @@ public:
     ~Sandbox();
 
     void Init();
+    void Shutdown();
+
     void Update();
     void OnEvent(Kouky3d::Event& e);
 
@@ -15,4 +17,6 @@ public:
 private:
     Kouky3d::Window* m_window;
     Kouky3d::Window* m_secondWindow;
+
+    bool m_running = false;
 };
