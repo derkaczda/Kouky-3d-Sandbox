@@ -54,12 +54,32 @@ void Sandbox::OnEvent(Kouky3d::Event& e)
 {
     Kouky3d::EventDispatcher dispatcher(e);
     dispatcher.Dispatch<Kouky3d::WindowCloseEvent>(BIND_EVENT_FN(Sandbox::OnWindowClose));
+    dispatcher.Dispatch<Kouky3d::WindowResizeEvent>(BIND_EVENT_FN(Sandbox::OnWindowResize));
+    dispatcher.Dispatch<Kouky3d::WindowMoveEvent>(BIND_EVENT_FN(Sandbox::OnWindowMove));
 }
 
 bool Sandbox::OnWindowClose(Kouky3d::WindowCloseEvent& e)
 {
     m_running = false;
     return true;
+}
+
+bool Sandbox::OnWindowResize(Kouky3d::WindowResizeEvent& e)
+{
+    std::cout << "resize" << std::endl;
+    return false;
+}
+
+bool Sandbox::OnWindowMove(Kouky3d::WindowMoveEvent& e)
+{
+    std::ostringstream oss_window_one;
+    oss_window_one << "x: " << m_window->GetPosition().x << " y: " << m_window->GetPosition().y;
+    m_window->SetTitle(oss_window_one.str());
+
+    std::ostringstream oss_window_two;
+    oss_window_two << "x: " << m_secondWindow->GetPosition().x << " y: " << m_secondWindow->GetPosition().y;
+    m_secondWindow->SetTitle(oss_window_two.str());
+    return false;
 }
 
 void Sandbox::Update()
@@ -142,16 +162,10 @@ void Sandbox::Update()
         // TODO: move that somewhere into the engine
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        std::ostringstream oss_window_one;
-        oss_window_one << "x: " << m_window->GetPosition().x << " y: " << m_window->GetPosition().y;
-        m_window->SetTitle(oss_window_one.str());
+        
         m_window->OnUpdate();
 
         m_secondWindow->GiveContext();
-
-        std::ostringstream oss_window_two;
-        oss_window_two << "x: " << m_secondWindow->GetPosition().x << " y: " << m_secondWindow->GetPosition().y;
-        m_secondWindow->SetTitle(oss_window_two.str());
        
         Kouky3d::Renderer::ClearColor({0.3f, 0.3f, 0.3f, 1.0f});
         Kouky3d::Renderer::Clear();
