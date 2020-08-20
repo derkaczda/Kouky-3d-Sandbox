@@ -18,6 +18,8 @@ private:
     bool OnWindowClose(Kouky3d::WindowCloseEvent& e);
     bool OnWindowResize(Kouky3d::WindowResizeEvent& e);
     bool OnWindowMove(Kouky3d::WindowMoveEvent& e);
+    bool OnKeyDown(Kouky3d::KeyDownEvent& e);
+    bool OnKeyUp(Kouky3d::KeyUpEvent& e);
 
 
 private:

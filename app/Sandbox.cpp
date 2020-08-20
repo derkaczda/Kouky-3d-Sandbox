@@ -50,14 +50,6 @@ void Sandbox::Shutdown()
     delete m_secondWindow;
 }
 
-void Sandbox::OnEvent(Kouky3d::Event& e)
-{
-    Kouky3d::EventDispatcher dispatcher(e);
-    dispatcher.Dispatch<Kouky3d::WindowCloseEvent>(BIND_EVENT_FN(Sandbox::OnWindowClose));
-    dispatcher.Dispatch<Kouky3d::WindowResizeEvent>(BIND_EVENT_FN(Sandbox::OnWindowResize));
-    dispatcher.Dispatch<Kouky3d::WindowMoveEvent>(BIND_EVENT_FN(Sandbox::OnWindowMove));
-}
-
 bool Sandbox::OnWindowClose(Kouky3d::WindowCloseEvent& e)
 {
     m_running = false;
@@ -91,6 +83,29 @@ bool Sandbox::OnWindowMove(Kouky3d::WindowMoveEvent& e)
     m_secondWindow->SetTitle(oss_window_two.str());
     return false;
 }
+
+bool Sandbox::OnKeyDown(Kouky3d::KeyDownEvent& e)
+{
+    std::cout << "Down " << e.GetKeycode() << std::endl;
+    return false;
+}
+
+bool Sandbox::OnKeyUp(Kouky3d::KeyUpEvent& e)
+{
+    std::cout << "Up " << e.GetKeycode() << std::endl;
+    return false;
+}
+
+void Sandbox::OnEvent(Kouky3d::Event& e)
+{
+    Kouky3d::EventDispatcher dispatcher(e);
+    dispatcher.Dispatch<Kouky3d::WindowCloseEvent>(BIND_EVENT_FN(Sandbox::OnWindowClose));
+    dispatcher.Dispatch<Kouky3d::WindowResizeEvent>(BIND_EVENT_FN(Sandbox::OnWindowResize));
+    dispatcher.Dispatch<Kouky3d::WindowMoveEvent>(BIND_EVENT_FN(Sandbox::OnWindowMove));
+    dispatcher.Dispatch<Kouky3d::KeyDownEvent>(BIND_EVENT_FN(Sandbox::OnKeyDown));
+    dispatcher.Dispatch<Kouky3d::KeyUpEvent>(BIND_EVENT_FN(Sandbox::OnKeyUp));
+}
+
 
 void Sandbox::Update()
 {
