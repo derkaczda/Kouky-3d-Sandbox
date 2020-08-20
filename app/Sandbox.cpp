@@ -64,12 +64,19 @@ bool Sandbox::OnWindowClose(Kouky3d::WindowCloseEvent& e)
     return true;
 }
 
+void Sandbox::SetWindowViewport(Kouky3d::Window* window)
+{
+    window->GiveContext();
+    Kouky3d::Renderer::Viewport(0, 0, window->GetSize().x, window->GetSize().y);
+}
+
 bool Sandbox::OnWindowResize(Kouky3d::WindowResizeEvent& e)
 {
-    m_window->GiveContext();
-    Kouky3d::Renderer::Viewport(0, 0, m_window->GetSize().x, m_window->GetSize().y);
-    m_secondWindow->GiveContext();
-    Kouky3d::Renderer::Viewport(0, 0, m_secondWindow->GetSize().x, m_secondWindow->GetSize().y);
+    if (e.GetWindowHandle() == m_window->GetHandle())
+        SetWindowViewport(m_window);
+    else if (e.GetWindowHandle() == m_secondWindow->GetHandle())
+        SetWindowViewport(m_secondWindow);
+
     return false;
 }
 
